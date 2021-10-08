@@ -1,12 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react'
 import detectEthereumProvider from '@metamask/detect-provider';
 import ContractUtil from "./contractUtil";
 import {
     Button,
     TextField,
-    Backdrop,
     CircularProgress,
     DialogTitle,
     DialogContentText,
@@ -14,11 +11,11 @@ import {
     DialogActions,
     Slide,
     Card,
-    Dialog, Container, Grid, Toolbar, AppBar, Hidden, Typography, Paper,
+    Dialog, Container, Grid,  Typography
 
 } from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
-import {encodeAddress, checkAddressChecksum, base58Decode} from "@polkadot/util-crypto";
+import { checkAddressChecksum, base58Decode} from "@polkadot/util-crypto";
 
 
 
@@ -57,7 +54,6 @@ class App extends React.Component {
 
             chainId:"0x4",
             isInstallMetaMask:true,
-            pendding:null,
             approveTx:null,
             swapTx:null,
             commitSuccess:false,
@@ -165,8 +161,10 @@ class App extends React.Component {
     handleAccountsChanged=async (accounts)=>{
         if(accounts[0]) {
             this.setState({currentAccount: accounts[0]});
-            let nmtBalance = await this.contractUtil.NMTBalance(this.state.currentAccount);
-            this.setState({nmtBalance: nmtBalance});
+            if(this._isMainChain()) {
+                let nmtBalance = await this.contractUtil.NMTBalance(this.state.currentAccount);
+                this.setState({nmtBalance: nmtBalance});
+            }
         }else{
             this.setState({currentAccount: ""});
         }
@@ -272,7 +270,7 @@ class App extends React.Component {
                     </Grid>
 
                     <Grid item xs={12} className={classes.style_flex_center}>
-                        {this.state.currentAccount!=""?
+                        {this.state.currentAccount!==""?
                             <TextField disabled={true} fullWidth  id="outlined-basic" label="From ERC20 Address" variant="outlined" value={this.state.currentAccount}/>
                             :<Button variant="contained" color="secondary" size={"large"} onClick={this._handleConnectClick}>Connect Wallet</Button>
                         }
@@ -286,7 +284,7 @@ class App extends React.Component {
 
                     <Grid item xs={12}>
                         <TextField disabled={this.state.currentAccount===""} id="outlined-basic" fullWidth label="Swap Amount" variant="outlined"
-                                   placeholder={this.state.nmtBalance}
+                                   placeholder={this.state.nmtBalance.toString()}
                                    type="number"
                                    onChange={this.handleAmountChange}
                         />
