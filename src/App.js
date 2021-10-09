@@ -11,6 +11,10 @@ import {
     DialogActions,
     Slide,
     Card,
+
+    AppBar,
+    Toolbar,
+    Link,
     Dialog, Container, Grid,  Typography
 
 } from '@material-ui/core';
@@ -22,8 +26,7 @@ import { checkAddressChecksum, base58Decode} from "@polkadot/util-crypto";
 
 const useStyles = theme=>({
     root: {
-        paddingTop: theme.spacing(10),
-        minHeight: theme.spacing(120)
+            marginTop:theme.spacing(8)
     },
     card:{
         padding: theme.spacing(4)
@@ -52,7 +55,7 @@ class App extends React.Component {
             alertMessage:"",
             approveDialogOpen:false,
 
-            chainId:"0x4",
+            chainId:"0x1",
             isInstallMetaMask:true,
             approveTx:null,
             swapTx:null,
@@ -63,7 +66,7 @@ class App extends React.Component {
     }
 
     _isMainChain=()=>{
-        return this.state.chainId === "0x4";
+        return this.state.chainId === "0x1";
     }
     async componentDidMount(){
         this.provider = await detectEthereumProvider();
@@ -137,7 +140,7 @@ class App extends React.Component {
         try {
             await this.provider.request({
                 method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0x4' }],
+                params: [{ chainId: '0x1' }],
             });
         } catch (switchError) {
             console.info(switchError);
@@ -252,7 +255,7 @@ class App extends React.Component {
                         </a>
                     </Grid>
                     }
-                    {this.state.chainId!=="0x4" &&
+                    {!this._isMainChain() &&
                     <Grid container className={classes.style_flex_center}>
                         <Button
                             onClick={this._handleSwithChain}
@@ -316,7 +319,7 @@ class App extends React.Component {
 
                         {this.state.commitSuccess &&
                         <Grid item xs={12}  className={classes.style_flex_center}>
-                            <Typography variant={"h6"}> Commit Success </Typography>
+                            <Typography variant={"h6"} style={{color:"red"}} > Commit Success </Typography>
                         </Grid>
                         }
 
@@ -329,8 +332,27 @@ class App extends React.Component {
                     </Grid>
                 </Grid>
                 </Card>
-            </Container>
+                <br/>
+                <Card className={classes.card}>
+                    <Grid item xs={12} className={classes.style_flex_center} >
+                        <Typography variant={"h6"} style={{margin:"15px"}}> Contact us</Typography>
+                    </Grid>
+                    <Grid item xs={12} className={classes.style_flex_center}>
+                        <a rel="noreferrer" href={"https://t.me/NFTmart"} target={"_blank"} >Telegram</a>
+                        &nbsp; &nbsp;&nbsp;&nbsp;
+                        <a rel="noreferrer" href={"https://twitter.com/NFTmartio"} target={"_blank"}>Twitter</a>
+                    </Grid>
+                </Card>
+                <AppBar  position="fixed" color="default" style={{ top: 'auto', bottom: 0 }}>
+                    <Toolbar >
+                        <Typography variant="subtitle2" noWrap style={{flexGrow:1,margin:"30px"}} align={"center"} >
+                            Power by <Link  href={"https://www.nftmart.io"} color={"inherit"} target={"_blank"}>NFTMart.io</Link>
+                            &nbsp;&nbsp;  <Link href={"https://etherscan.io/address/0xb5d65ff6ee3a366adafac882b2737a37dc73b66a#code"} color={"inherit"} target={"_blank"}>NMTSwap Source Code</Link>
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
 
+            </Container>
       <Dialog
           open={this.state.alertMessage!==""}
           onClose={()=>{this.setState({alertMessage:""})}}
@@ -372,6 +394,7 @@ class App extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
             </React.Fragment>
     );
   }

@@ -1,7 +1,7 @@
 import { ethers } from "ethers"
 
-const SWAP_ADDRESS ="0xFD43a372b6A900AB05f5ddccb0C6298B2D0469AB"
-const NMT_ADDRESS ="0x4373A302B3Fd99d91E9eF540f200FdCd856Fbb73"
+const SWAP_ADDRESS ="0xb5d65ff6ee3a366adafac882b2737a37dc73b66a"
+const NMT_ADDRESS ="0xd81b71cBb89B2800CDb000AA277Dc1491dc923C3"
 
 class   ContractUtil{
     provider
